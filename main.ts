@@ -18,6 +18,16 @@ controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . . . c c c c c . . 
         `, mySprite, 200, 0)
 })
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
+    enemy_person.destroy()
+    enemy_person.destroy()
+    info.changeScoreBy(1)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
+    info.changeLifeBy(-1)
+    enemy_person.destroy(effects.disintegrate, 500)
+})
+let enemy_person: Sprite = null
 let projectile: Sprite = null
 let mySprite: Sprite = null
 effects.starField.startScreenEffect()
@@ -41,3 +51,25 @@ mySprite = sprites.create(img`
     `, SpriteKind.Player)
 controller.moveSprite(mySprite)
 mySprite.setFlag(SpriteFlag.StayInScreen, true)
+game.onUpdateInterval(2000, function () {
+    enemy_person = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . 2 . . . . . 2 . . . . . 
+        . . . . 2 2 c c c 2 2 . . . . . 
+        . . . . . c . . . c . . . . . . 
+        . . . . c . f . f . c . . . . . 
+        . . . . c . . . . . c . . . . . 
+        . . . . c . . f . . c . . . . . 
+        . . . . . c f . f c . . . . . . 
+        . . . . . . c c c . . . . . . . 
+        . . . . . . . 2 . . . . . . . . 
+        . . . . . 2 2 2 2 2 . . . . . . 
+        . . . . . . . 2 . . . . . . . . 
+        . . . . . . 2 . 2 . . . . . . . 
+        . . . . . 2 . . . 2 . . . . . . 
+        . . . . 2 . . . . . 2 . . . . . 
+        `, SpriteKind.Enemy)
+    enemy_person.vx = -20
+    enemy_person.y = randint(10, scene.screenHeight())
+})
